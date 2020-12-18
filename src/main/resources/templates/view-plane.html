@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Update User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/shards.min.css">
+</head>
+<body>
+<div th:switch="${plane}" class="container my-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 th:case="null">Invalid Plane!</h2>
+            <div th:case="*">
+                <h2 class="my-5">View Plane</h2>
+                <table class="table table-borderless table-responsive">
+                    <tr>
+                        <td><h5>Plane Name </h5></td>
+                        <td th:text="${plane.name}"></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Total Seats</h5></td>
+                        <td th:text="${plane.numberOfSeats}"></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Window Seats</h5></td>
+                        <td th:text="${plane.totalWindowSeats}"></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Aile Seats</h5></td>
+                        <td th:text="${plane.totalAileSeats}"></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Center Seats</h5></td>
+                        <td th:text="${plane.totalCenterSeats}"></td>
+                    </tr>
+                </table>
+
+                <div class="col-md-6">
+                    <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+                    <form action="#" th:action="@{/addPassenger/{id}(id=${plane.id})}" method="post">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <input type="number" name="numberOfSeats" class="form-control" id="numberOfSeats" placeholder="Number Of Passenger">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="submit" class="btn btn-primary" value="Add Passengers">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <table class="table table-responsive">
+                    <tbody>
+                    <tr>
+                        <td th:each="seatBlock : ${plane.seatBlocks}">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr th:each="seatRow : ${seatBlock.seats}">
+                                    <th:block th:each="seatColumn : ${seatRow}"
+                                              th:switch="${seatColumn.seatType.value}">
+                                        <td th:case="'W'"
+                                            class="seat-window bg-info">
+                                            <span th:if="${seatColumn.passenger != null}" th:text="${seatColumn.passenger.id}"></span>
+                                        </td>
+                                        <td th:case="'A'" class="seat-aile bg-success">
+                                            <span th:if="${seatColumn.passenger != null}" th:text="${seatColumn.passenger.id}"></span>
+                                        </td>
+                                        <td th:case="'C'" class="seat-center table-primary">
+                                            <span th:if="${seatColumn.passenger != null}" th:text="${seatColumn.passenger.id}"></span>
+                                        </td>
+                                    </th:block>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <p class="my-5"><a href="/" class="btn btn-primary"><i class="fas fa-home ml-2"></i> Home</a></p>
+</div>
+</body>
+</html>
