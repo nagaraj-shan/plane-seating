@@ -2,8 +2,8 @@
 
 # Requirements
 
-1.Java 1.8
-2.Maven
+1. Java 1.8
+2. Maven
 
 # Build
 
